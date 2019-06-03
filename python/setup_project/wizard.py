@@ -42,6 +42,10 @@ class SetupProjectWizard(QtGui.QWizard):
         self._logger.addHandler(self._handler)
         wizard_factory.set_logger(self._logger)
 
+        #self._logger.info(project)
+
+        self.projectName = project["name"]
+
         # run the factory to grab the wizard
         self.core_wizard = wizard_factory.execute({})
         self.core_wizard.set_project(project["id"])
@@ -57,8 +61,8 @@ class SetupProjectWizard(QtGui.QWizard):
         self.helpRequested.connect(self._on_help_requested)
 
         # Setup fields
-        self.ui.github_config_page.registerField("github_url*", self.ui.github_url)
-        self.ui.disk_config_page.registerField("disk_path*", self.ui.path)
+        # self.ui.github_config_page.registerField("github_url*", self.ui.github_url)
+        # self.ui.disk_config_page.registerField("disk_path*", self.ui.path)
         self.ui.project_name_page.registerField("project_name*", self.ui.project_name)
         self.ui.config_location_page.registerField("config_path_mac", self.ui.mac_path)
         self.ui.config_location_page.registerField("config_path_win", self.ui.windows_path)
@@ -71,10 +75,10 @@ class SetupProjectWizard(QtGui.QWizard):
                 self.page(page_id).setup_ui(page_id)
 
         # Setup Page Order
-        self.ui.setup_type_page.set_default_configs_page(self.ui.default_configs_page)
-        self.ui.setup_type_page.set_project_page(self.ui.project_config_page)
-        self.ui.setup_type_page.set_github_page(self.ui.github_config_page)
-        self.ui.setup_type_page.set_disk_page(self.ui.disk_config_page)
+        # self.ui.setup_type_page.set_default_configs_page(self.ui.default_configs_page)
+        # self.ui.setup_type_page.set_project_page(self.ui.project_config_page)
+        # self.ui.setup_type_page.set_github_page(self.ui.github_config_page)
+        # self.ui.setup_type_page.set_disk_page(self.ui.disk_config_page)
 
         self.ui.project_name_page.set_next_page(self.ui.config_location_page)
         self.ui.config_location_page.set_next_page(self.ui.progress_page)
@@ -90,6 +94,12 @@ class SetupProjectWizard(QtGui.QWizard):
         self.button(self.NextButton).setStyleSheet("background-color: rgb(16, 148,223);")
         self.button(self.FinishButton).setStyleSheet("background-color: rgb(16, 148,223);")
         self.button(self.CommitButton).setStyleSheet("background-color: rgb(16, 148,223);")
+
+        import sys
+        if sys.platform == "darwin":
+            self.set_config_uri(r'/mnt/shared/sharedShotgun/shotgun-nozon-config')
+        else :
+            self.set_config_uri(r'z:\sharedShotgun\shotgun-nozon-config2')
 
     def _on_help_requested(self):
         # forward help request to current page
@@ -137,7 +147,7 @@ class SetupProjectWizard(QtGui.QWizard):
                 current_page.set_next_page(first_page)
             else:
                 # no storage pages set the right next page
-                current_page.set_next_page(self.ui.project_name_page)
+                #current_page.set_next_page(self.ui.project_name_page)
 
                 # actually set the uri
                 self.core_wizard.set_config_uri(uri)
