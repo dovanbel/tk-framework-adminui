@@ -18,6 +18,7 @@ from .emitting_handler import EmittingHandler
 from .storage_locations_page import StorageLocationsPage
 
 import sgtk
+import sys
 
 
 class SetupProjectWizard(QtGui.QWizard):
@@ -95,11 +96,11 @@ class SetupProjectWizard(QtGui.QWizard):
         self.button(self.FinishButton).setStyleSheet("background-color: rgb(16, 148,223);")
         self.button(self.CommitButton).setStyleSheet("background-color: rgb(16, 148,223);")
 
-        import sys
+        # Nozon specific
         if sys.platform == "darwin":
             self.set_config_uri(r'/mnt/shared/sharedShotgun/shotgun-nozon-config')
-        else :
-            self.set_config_uri(r'z:\sharedShotgun\shotgun-nozon-config2')
+        elif sys.platform == 'win32':
+            self.set_config_uri(r'z:\sharedShotgun\shotgun-nozon-config')
 
     def _on_help_requested(self):
         # forward help request to current page
